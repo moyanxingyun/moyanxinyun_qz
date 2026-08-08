@@ -554,6 +554,30 @@ a{color:inherit;text-decoration:none}
 .btn.ghost{background:transparent;border:1px solid var(--line2);color:var(--muted)}
 .btn.ghost:hover{border-color:var(--mint);color:var(--txt)}
 @keyframes indet{0%{transform:translateX(-30%)}50%{transform:translateX(30%)}100%{transform:translateX(-30%)}}
+.ap-hero{background:linear-gradient(135deg,rgba(111,191,143,.12),rgba(255,244,234,.4));border:1px solid rgba(111,191,143,.22);border-radius:16px;padding:20px 22px;margin-bottom:16px}
+.ap-hero h2{font-size:21px;margin:4px 0 0;letter-spacing:.01em}
+.ap-job{border:1px solid var(--line);border-radius:12px;padding:15px 16px;background:linear-gradient(135deg,rgba(111,191,143,.05),transparent 60%)}
+.ap-job-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.ap-job-co{font-size:13px;font-weight:800}
+.ap-job-t{font-size:16px;font-weight:900;margin-top:2px;color:var(--txt)}
+.ap-job-rows{display:flex;flex-direction:column;gap:7px}
+.ap-row{display:flex;gap:10px;font-size:12px;line-height:1.6}
+.ap-row span{flex:none;width:64px;color:var(--faint);font-family:var(--mono);font-size:10.5px;padding-top:1px}
+.ap-row b{flex:1;min-width:0;word-break:break-all;color:var(--txt)}
+.ap-row .ap-link{color:var(--cyan);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.ap-note{margin-top:12px;padding:10px 13px;border-radius:10px;background:rgba(255,214,181,.14);border:1px dashed rgba(201,127,46,.32);font-size:11.5px;color:var(--muted);line-height:1.7}
+.ap-resume-ok{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:11px;background:rgba(111,191,143,.09);border:1px solid rgba(111,191,143,.28)}
+.ap-ok-icon{width:30px;height:30px;flex:none;border-radius:50%;background:var(--mint);color:#072019;font-weight:900;display:grid;place-items:center;font-size:15px}
+.ap-resume-empty{padding:6px 0}
+.ap-actions{display:flex;gap:10px;margin-bottom:14px}
+.ap-actions .btn{white-space:nowrap}
+.ap-tips{padding:14px 15px;border-radius:11px;border:1px dashed rgba(111,191,143,.35);background:rgba(111,191,143,.05)}
+.ap-tips-title{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--mint);margin-bottom:8px}
+.ap-tip{display:flex;gap:8px;font-size:12px;line-height:1.7;color:var(--muted);margin-bottom:6px}
+.ap-tip:last-child{margin-bottom:0}
+.ap-tip-i{color:var(--mint);font-weight:800;flex:none}
+.letter-paper{background:#FFFDF9}
+.ap-sm-chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;letter-spacing:.05em;color:#E09A52;border:1px solid rgba(224,154,82,.4);background:rgba(255,244,232,.6);border-radius:99px;padding:2px 8px}
 .check-item{display:flex;align-items:flex-start;gap:10px;padding:9px 2px;border-bottom:1px dashed var(--line);font-size:13px}
 .check-item:last-child{border-bottom:none}
 .check-item .cb{
@@ -1199,8 +1223,8 @@ let JOBS = [
   {"id": "seasun", "company": "西山居", "product": "《剑网3》", "business": "游戏研发", "size": "1000-4999 人", "city": "珠海", "direction": "场景制作", "title": "场景制作（武侠 MMO）", "applyStart": "2026-07-22", "applyEnd": "2026-08-20", "exam": "待定", "link": "https://campus.xoyo.com", "source": "官网", "confirmed": true, "keywords": ["写实", "场景搭建", "Maya", "引擎编辑", "古建"]},
   {"id": "games37", "company": "三七互娱", "product": "《斗罗大陆》系列", "business": "游戏研发/发行", "size": "5000 人以上", "city": "广州", "direction": "场景美术", "title": "场景原画 / 模型", "applyStart": "2026-08-06", "applyEnd": "2026-08-10", "exam": "8 月中旬", "link": "https://campus.37.com", "source": "官网", "confirmed": true, "keywords": ["风格化", "手绘贴图", "Photoshop", "场景设计"]},
   {"id": "xd", "company": "心动", "product": "《铃兰之剑》《泰拉瑞亚》国服", "business": "游戏研发/发行", "size": "1000-4999 人", "city": "上海", "direction": "场景地编", "title": "场景地编", "applyStart": "2026-08-02", "applyEnd": "2026-09-18", "exam": "2026-08-22 面试", "link": "https://xd.xindong.com", "source": "官网", "confirmed": true, "keywords": ["卡通", "地形", "关卡", "Unity"]},
-  {"id": "sunborn", "company": "散爆网络", "product": "《少女前线》系列", "business": "游戏研发", "size": "500-999 人", "city": "上海", "direction": "场景模型", "title": "3D 场景模型", "applyStart": "2026-08-04", "applyEnd": "2026-09-30", "exam": "待定", "link": "https://sunborn.zhiye.com", "source": "官网", "confirmed": true, "keywords": ["二次元", "NPR", "Maya", "Substance", "场景拼接"]},
-  {"id": "deepblue", "company": "深蓝互动", "product": "《重返未来：1999》", "business": "游戏研发", "size": "500-999 人", "city": "广州", "direction": "场景美术", "title": "场景原画 / 3D", "applyStart": "2026-07-30", "applyEnd": "2026-08-11", "exam": "8 月下旬", "link": "https://deepblue.zhiye.com", "source": "官网", "confirmed": true, "keywords": ["风格化", "概念设计", "场景氛围", "Photoshop"]},
+  {"id": "sunborn", "company": "散爆网络", "product": "《少女前线》系列", "business": "游戏研发", "size": "100-499 人", "city": "上海", "direction": "场景模型", "title": "3D 场景模型", "applyStart": "2026-08-03", "applyEnd": "2026-09-03", "exam": "2026-09 起", "link": "https://jobs.sunborn.game.com/campus", "source": "官网/公众号/邮箱", "confirmed": true, "keywords": ["二次元", "NPR", "Maya", "Substance", "场景拼接"]},
+  {"id": "deepblue", "company": "深蓝互动", "product": "《重返未来：1999》", "business": "游戏研发", "size": "500-999 人", "city": "广州", "direction": "场景美术", "title": "场景原画 / 3D", "applyStart": "2026-07-30", "applyEnd": "2026-08-11", "exam": "8 月下旬", "link": "https://app.mokahr.com/campus_apply/blueinteractive/38434#/jobs", "source": "Moka 招聘系统", "confirmed": true, "keywords": ["风格化", "概念设计", "场景氛围", "Photoshop"]},
   {"id": "lingxi", "company": "灵犀互娱", "product": "《三国志·战略版》", "business": "游戏研发/发行", "size": "1000-4999 人", "city": "广州", "direction": "场景制作", "title": "场景制作（SLG）", "applyStart": "2026-08-01", "applyEnd": "2026-09-12", "exam": "待定", "link": "https://lingxi.zhiye.com", "source": "官网", "confirmed": true, "keywords": ["写实", "低模", "引擎", "场景整合"]},
   {"id": "moonton", "company": "沐瞳科技", "product": "《无尽对决》", "business": "游戏研发/发行", "size": "1000-4999 人", "city": "上海/新加坡", "direction": "场景地编", "title": "MOBA 场景地编", "applyStart": "2026-08-05", "applyEnd": "2026-10-20", "exam": "待定", "link": "https://moonton.com/campus", "source": "官网", "confirmed": true, "keywords": ["MOBA", "竞技", "地形", "性能", "Unity"]},
   {"id": "gbit", "company": "吉比特 / 雷霆", "product": "《问道》《一念逍遥》", "business": "游戏研发/发行", "size": "1000-4999 人", "city": "厦门", "direction": "场景美术", "title": "场景美术", "applyStart": "2026-07-25", "applyEnd": "2026-08-14", "exam": "8 月下旬", "link": "https://g-bits.zhiye.com", "source": "官网", "confirmed": true, "keywords": ["国风", "手绘", "场景设计", "Photoshop"]},
@@ -1781,7 +1805,9 @@ let JOBS = [
   {"id": "netease-PO1000086", "company": "网易雷火", "product": "《逆水寒》《永劫无间》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "杭州", "direction": "美术（其他）", "title": "大数据平台开发工程师", "applyStart": "2026-07-22", "applyEnd": "2026-10-15", "exam": "", "link": "https://campus.163.com/app/detail/index?id=3737&projectId=77", "source": "官网", "confirmed": true, "keywords": [], "note": "全职 · 雷火事业群", "rolling": false},
   {"id": "netease-PO1000085", "company": "网易雷火", "product": "《逆水寒》《永劫无间》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "杭州", "direction": "非美术", "title": "游戏安全开发工程师", "applyStart": "2026-07-22", "applyEnd": "2026-10-15", "exam": "", "link": "https://campus.163.com/app/detail/index?id=3736&projectId=77", "source": "官网", "confirmed": true, "keywords": [], "note": "全职 · 雷火事业群", "rolling": false},
   {"id": "netease-PO1000127", "company": "网易雷火", "product": "《逆水寒》《永劫无间》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "杭州", "direction": "非美术", "title": "嵌入式开发工程师", "applyStart": "2026-07-22", "applyEnd": "2026-10-15", "exam": "", "link": "https://campus.163.com/app/detail/index?id=4703&projectId=77", "source": "官网", "confirmed": true, "keywords": [], "note": "全职 · 伏羲机器人", "rolling": false},
-  {"id": "netease-PO1000126", "company": "网易雷火", "product": "《逆水寒》《永劫无间》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "杭州", "direction": "美术（其他）", "title": "游戏AI产品经理", "applyStart": "2026-07-22", "applyEnd": "2026-10-15", "exam": "", "link": "https://campus.163.com/app/detail/index?id=4702&projectId=77", "source": "官网", "confirmed": true, "keywords": [], "note": "全职 · 雷火事业群", "rolling": false}
+  {"id": "netease-PO1000126", "company": "网易雷火", "product": "《逆水寒》《永劫无间》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "杭州", "direction": "美术（其他）", "title": "游戏AI产品经理", "applyStart": "2026-07-22", "applyEnd": "2026-10-15", "exam": "", "link": "https://campus.163.com/app/detail/index?id=4702&projectId=77", "source": "官网", "confirmed": true, "keywords": [], "note": "全职 · 雷火事业群", "rolling": false},
+  {"id": "gamesci", "company": "游戏科学", "product": "《黑神话：悟空》", "business": "游戏研发（3A）", "size": "100-499 人", "city": "深圳", "direction": "场景美术", "title": "场景美术（3A 写实）", "applyStart": "2026-08-01", "applyEnd": "2026-10-31", "exam": "简历筛选后安排", "link": "mailto:hr@gamesci.com.cn", "source": "邮箱投递", "confirmed": true, "keywords": ["写实", "UE5", "ZBrush", "Substance Painter", "扫描资产", "场景氛围"]},
+  {"id": "lingyoufang", "company": "灵游坊", "product": "《影之刃》系列", "business": "游戏研发（单机/动作）", "size": "50-99 人", "city": "北京", "direction": "场景美术", "title": "场景美术（国风动作）", "applyStart": "2026-08-01", "applyEnd": "2026-10-31", "exam": "简历筛选后安排", "link": "mailto:geyan@s-game.com.cn", "source": "邮箱投递", "confirmed": true, "keywords": ["国风", "写实", "UE5", "ZBrush", "场景氛围"]}
 ];
 
 let INTERNS = [
@@ -2472,6 +2498,7 @@ const state = {
   quiet:false,
   remote:false,
   filters:{direction:'全部', city:'全部', size:'全部', status:'全部'},
+  smallOnly:false,
   sort:'new',
   resumeFile:null,
   analysisJobId:null,
@@ -2479,6 +2506,9 @@ const state = {
   analyzing:false,
   rewrite:null,
   rewriting:false,
+  applyJobId:null,
+  applyMaterial:null,
+  applying:false,
   notifs:JSON.parse(JSON.stringify(NOTIFS)),
   applications:{
     mihoyo:'未投递', netease_gh:'未投递', hypergryph:'未投递',
@@ -2491,6 +2521,7 @@ const TITLE = {
   jobs:{t:'岗位库', s:'JOB DATABASE'},
   intern:{t:'实习招聘', s:'INTERN HIRING'},
   job:{t:'岗位详情', s:'POSITION FILE'},
+  apply:{t:'智能投递', s:'APPLY COPILOT'},
   resume:{t:'简历诊断', s:'AI RESUME LAB'},
   kanban:{t:'投递看板', s:'APPLICATION BOARD'},
   alerts:{t:'站内提醒', s:'SIGNAL CENTER'},
@@ -2577,7 +2608,7 @@ function render(){
 }
 
 function renderNav(){
-  const activeMap = {home:'home', jobs:'jobs', job:'jobs', intern:'intern', resume:'resume', kanban:'kanban', alerts:'alerts', settings:'settings'};
+  const activeMap = {home:'home', jobs:'jobs', job:'jobs', apply:'jobs', intern:'intern', resume:'resume', kanban:'kanban', alerts:'alerts', settings:'settings'};
   const active = activeMap[state.curView] || 'home';
   const unread = state.notifs.filter(n=>n.unread).length;
   const badge = unread > 0 ? `<span class="badge">${unread}</span>` : '';
@@ -2644,6 +2675,7 @@ function viewHTML(view, id){
     case 'intern': return vIntern();
     case 'job': return vJobDetail(id);
     case 'resume': return vResume();
+    case 'apply': return vApply(id);
     case 'kanban': return vKanban();
     case 'alerts': return vAlerts();
     case 'settings': return vSettings();
@@ -2784,6 +2816,7 @@ function jobCardHTML(j,i){
       <div class="jc-foot">
         <span class="src">SRC · ${j.source}${j.confirmed?' / VERIFIED':''}</span>
         <div class="jc-actions">
+          <button class="btn sm ${isSmallCompany(j)?'primary':''}" onclick="event.stopPropagation();openApply('${j.id}')">${IC.spark} 智能投递</button>
           <button class="btn sm" onclick="event.stopPropagation();window.open('${j.link}','_blank')">去官网</button>
           ${j.rolling?'':`<button class="btn sm primary" onclick="event.stopPropagation();resumeFor('${j.id}')">优化简历</button>`}
         </div>
@@ -2800,6 +2833,7 @@ function vJobs(){
   if(f.direction !== '全部') list = list.filter(j=>j.direction === f.direction);
   if(f.city !== '全部') list = list.filter(j=>j.city.includes(f.city));
   if(f.size !== '全部') list = list.filter(j=>j.size === f.size);
+  if(state.smallOnly) list = list.filter(j=>isSmallCompany(j));
   if(f.status !== '全部'){
     list = list.filter(j=>{
       const s = jobStatus(j);
@@ -2829,6 +2863,7 @@ function vJobs(){
     <div class="f-group">
       ${dirChips.map(d=>`<span class="f-chip ${f.direction===d?'on':''}" onclick="setFilter('direction','${d}')">${d}</span>`).join('')}
     </div>
+    <span class="f-chip ${state.smallOnly?'on':'sm'}" onclick="toggleSmall()">${state.smallOnly?'✓ ':''}中小公司</span>
     <div class="spacer"></div>
     <select class="f-select" onchange="setFilter('city',this.value)">
       ${cities.map(c=>`<option ${f.city===c?'selected':''}>${c}</option>`).join('')}
@@ -2854,6 +2889,12 @@ function vJobs(){
 
 function setFilter(key, val){
   state.filters[key] = val;
+  state.quiet = true;
+  render();
+}
+
+function toggleSmall(){
+  state.smallOnly = !state.smallOnly;
   state.quiet = true;
   render();
 }
@@ -2976,13 +3017,244 @@ function vJobDetail(id){
         <div class="side-info-row"><span class="k">城市</span><span class="v">${j.city}</span></div>
         <div class="side-info-row"><span class="k">来源</span><span class="v">${j.source} · ${j.confirmed?'已确认':'待确认'}</span></div>
         <div class="jd-actions">
-          <button class="btn primary" onclick="window.open('${j.link}','_blank')">${IC.link} 去官网投递</button>
+          ${JOBS.some(x=>x.id===j.id)?`<button class="btn primary" onclick="openApply('${j.id}')">${IC.spark} 智能投递${isSmallCompany(j)?' · 中小公司':''}</button>`:''}
+          <button class="btn" onclick="window.open('${j.link}','_blank')">${IC.link} 去官网投递</button>
           ${JOBS.some(x=>x.id===j.id)?`<button class="btn" onclick="resumeFor('${j.id}')">${IC.spark} 用此岗位优化简历</button>`:''}
         </div>
         <p class="faint" style="font-size:10.5px;margin-top:10px">信息更新于 2026-08-07，以官网为准</p>
       </div>
     </div>
   </div>`;
+}
+
+/* ----- 智能投递（中小公司专项） ----- */
+function isSmallCompany(j){
+  const s = j && j.size || '';
+  return s.indexOf('50-99') >= 0 || s.indexOf('100-499') >= 0;
+}
+
+function openApply(id){
+  state.applyJobId = id;
+  state.applyMaterial = null;
+  location.hash = '#/apply/' + id;
+}
+
+function vApply(id){
+  if(state.applyJobId !== id) state.applyJobId = id;
+  const j = JOBS.find(x=>x.id===id) || JOBS[0];
+  if(!j) return '<div class="card pad">岗位不存在</div>';
+  if(state.applyJobId !== j.id) state.applyJobId = j.id;
+  const small = isSmallCompany(j);
+  const hasResume = !!state.resumeText;
+  const mat = state.applyMaterial && state.applyMaterial.jobId === j.id ? state.applyMaterial : null;
+  const appState = state.applications[j.id] || '未投递';
+
+  return `
+  <div class="back" onclick="location.hash='#/jobs'">← 返回岗位库</div>
+  <section class="ap-hero reveal">
+    <div class="kicker">// APPLY COPILOT · 智能投递助手</div>
+    <h2>投递 ${j.company} · ${j.title}</h2>
+    <p class="muted" style="font-size:12.5px;margin-top:6px">${small
+      ? '中小公司专项：一键生成定制简历 + 求职信 + 投递建议，准备好材料后打开官网直投。'
+      : '生成定制简历 + 求职信 + 投递建议，准备好材料后打开官网投递。'}</p>
+  </section>
+
+  <div class="diag-steps reveal">
+    <div class="dstep ${hasResume?'on':''}"><div class="ds-num">1</div><div class="ds-lbl">确认简历</div></div>
+    <div class="dstep ${mat?'on':''}"><div class="ds-num">2</div><div class="ds-lbl">生成投递材料</div></div>
+    <div class="dstep ${mat&&appState!=='未投递'?'on':''}"><div class="ds-num">3</div><div class="ds-lbl">去官网投递</div></div>
+  </div>
+
+  <div class="diag-grid">
+    <div>
+      <div class="card pad corners reveal" style="--d:.08s">
+        <div class="sec-head"><h3>STEP 01 · 目标岗位</h3><span class="tag">${small?'SMALL BIZ':'JOB FILE'}</span></div>
+        <div class="ap-job">
+          <div class="ap-job-top">
+            <div class="jc-logo" style="width:42px;height:42px;font-size:15px">${j.company.slice(0,2)}</div>
+            <div style="flex:1;min-width:0">
+              <div class="ap-job-co">${j.company}</div>
+              <div class="ap-job-t">${j.title}</div>
+            </div>
+            <span class="chip ${small?'mint':'cyan'}">${j.size}</span>
+          </div>
+          <div class="ap-job-rows">
+            <div class="ap-row"><span>主营</span><b>${j.business||'—'}</b></div>
+            <div class="ap-row"><span>代表项目</span><b>${j.product||'—'}</b></div>
+            <div class="ap-row"><span>城市</span><b>${j.city}</b></div>
+            <div class="ap-row"><span>投递入口</span><b class="ap-link" onclick="window.open('${j.link}','_blank')">${j.link.replace('https://','')} ↗</b></div>
+          </div>
+        </div>
+        <div class="ap-note">${small
+          ? '💡 中小团队通常人手少、流程快，HR 或项目负责人直接看材料。简历与求职信越「对味」，回复越快。'
+          : '💡 大厂通常走统一网申系统，材料按官网要求提交。'}</div>
+      </div>
+
+      <div class="card pad corners reveal" style="--d:.14s;margin-top:14px">
+        <div class="sec-head"><h3>STEP 02 · 我的简历</h3><span class="tag">${hasResume?'READY':'NEED INPUT'}</span></div>
+        ${hasResume ? `
+          <div class="ap-resume-ok">
+            <span class="ap-ok-icon">✓</span>
+            <div style="flex:1;min-width:0">
+              <b>简历已就绪</b>
+              <div class="muted" style="font-size:11.5px;margin-top:2px">${state.resumeText.length} 字符 · 将用于生成定制简历与求职信</div>
+            </div>
+            <button class="btn sm" onclick="location.hash='#/resume'">编辑简历</button>
+          </div>` : `
+          <div class="ap-resume-empty">
+            <p class="muted" style="font-size:12px;margin-bottom:12px">还没有简历文本。去「简历诊断」粘贴或上传简历，再回来一键生成投递材料。</p>
+            <button class="btn primary" onclick="location.hash='#/resume'">${IC.doc} 去填写简历</button>
+          </div>`}
+      </div>
+    </div>
+
+    <div>
+      <div class="card pad corners reveal" style="--d:.2s">
+        <div class="sec-head"><h3>STEP 03 · 生成投递材料</h3><span class="tag">AI ENGINE</span></div>
+        ${!mat ? `
+          <button class="btn primary" style="width:100%" ${hasResume?'':'disabled style="opacity:.4;cursor:not-allowed"'} onclick="generateApplyMaterial()">
+            ${IC.spark} ${state.applying?'生成中…':'生成定制简历 + 求职信'}
+          </button>
+          ${state.applying?'<div class="rewrite-loading" style="margin-top:12px"><div class="rl-line">正在分析岗位要求并生成投递材料…</div><div class="bar"><i style="width:55%;animation:indet 1.4s ease-in-out infinite"></i></div></div>':''}
+          <div class="analysis-note"><b>材料包括：</b>针对该岗位的定制简历（Markdown）· 求职信 · 3-5 条投递建议。</div>` : `
+          <div class="ap-actions">
+            <button class="btn primary" style="flex:1" onclick="window.open('${j.link}','_blank')">${IC.link} 打开官网投递</button>
+            <button class="btn ${appState==='未投递'?'':'primary'}" onclick="markApplied('${j.id}')">${appState==='未投递'?'标记已投递':'已投递 ✓'}</button>
+          </div>
+          <div class="ap-tips">
+            <div class="ap-tips-title">投递建议</div>
+            ${(mat.apply_tips||[]).map(t=>`<div class="ap-tip"><span class="ap-tip-i">▸</span>${t}</div>`).join('')}
+          </div>`}
+      </div>
+
+      ${mat ? `
+      <div class="card pad corners reveal" style="--d:.24s;margin-top:14px">
+        <div class="sec-head"><h3>定制简历</h3><span class="tag">RESUME</span></div>
+        <div class="rewrite-actions">
+          <button class="btn sm" onclick="copyApplyText('resume_md')">复制全文</button>
+          <button class="btn sm primary" onclick="downloadApply('resume_md','定制简历-${j.company}')">${IC.doc} 下载 .md</button>
+          <button class="btn sm ghost" onclick="location.hash='#/resume'">重新生成</button>
+        </div>
+        <div class="rewrite-paper">${mdToHtml(mat.resume_md)}</div>
+      </div>
+
+      <div class="card pad corners reveal" style="--d:.28s;margin-top:14px">
+        <div class="sec-head"><h3>求职信</h3><span class="tag">COVER LETTER</span></div>
+        <div class="rewrite-actions">
+          <button class="btn sm" onclick="copyApplyText('cover_letter')">复制全文</button>
+          <button class="btn sm primary" onclick="downloadApply('cover_letter','求职信-${j.company}')">${IC.doc} 下载 .md</button>
+        </div>
+        <div class="rewrite-paper letter-paper">${mdToHtml(mat.cover_letter)}</div>
+        <div class="rewrite-note">引擎：${mat.mode} · 请替换姓名、联系方式等真实信息后再投递</div>
+      </div>` : ''}
+    </div>
+  </div>`;
+}
+
+function buildApplyMaterial(job){
+  const company = job.company, title = job.title, product = job.product || '在研项目';
+  return {
+    jobId: job.id,
+    company: company,
+    title: title,
+    engine: 'deepseek-v4-flash',
+    mode: 'demo（未配置 DEEPSEEK_API_KEY，返回演示材料）',
+    resume_md: buildRewrite(job).markdown,
+    cover_letter: `尊敬的 ${company} 招聘团队：
+
+您好！我是数字媒体艺术专业 2027 届毕业生，主修游戏场景美术建模与地编方向。看到贵司正在招聘${title}岗位，非常希望能加入团队，为${product}贡献一份力量。
+
+我一直关注${company}的产品，尤其欣赏团队在美术风格上的独特坚持。作为独立游戏 / 中小团队，我认为场景美术更需要「一专多能」——既能独立完成白模验证到美术落地的全流程，也能在资源有限的条件下做出有表现力的画面。这正是我擅长的：
+
+- 基于 UE5 Landscape 独立完成 1km² 山谷地形与植被铺装，DrawCall 控制在 120 以内，兼顾画面与性能；
+- 独立完成次世代 PBR 全流程：ZBrush 高模 180 万面 → 拓扑 8 万三角面 → Substance Painter 全套贴图 → Marmoset 烘焙与 UE5 实时渲染；
+- 习惯用白模先验证玩法与动线，再推进美术落地，减少返工。
+
+作品集（ArtStation 链接）中按场景 / 道具 / 地编分类整理了完整项目，包含过程图与性能说明，方便您快速了解我的能力范围。若有机会，我非常愿意在面试中现场演示项目制作思路。
+
+感谢您抽出时间阅读，期待能有机会与贵司团队交流！
+
+此致敬礼
+张三
+2026 年 8 月`,
+    apply_tips: [
+      `优先通过官网投递入口提交（${job.link || '官网'}），中小团队通常直接看 HR 邮箱，正文务必附作品集链接。`,
+      '求职信已按岗位定制：开头点明对该公司产品的了解，结尾可补充一句对具体项目的想法（如美术风格建议）。',
+      '简历中保留 2-4 个项目即可，中小团队更看重深度而非数量；把最匹配该岗位的项目放最前。',
+      '投递后 5-7 个工作日可礼貌跟进一次；附上作品集链接时确认前三张就是与该岗位最相关的作品。'
+    ]
+  };
+}
+
+async function generateApplyMaterial(){
+  if(state.applying || !state.applyJobId || !state.resumeText) return;
+  const job = JOBS.find(x=>x.id===state.applyJobId) || JOBS[0];
+  if(!job) return;
+  state.applying = true;
+  state.applyMaterial = null;
+  render();
+  let mat = null;
+  if(state.remote){
+    try{
+      const res = await fetch('http://localhost:8001/api/apply-material', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({resume_text: state.resumeText, job})
+      });
+      if(res.ok){
+        const d = await res.json();
+        if(d.cover_letter){
+          mat = d;
+          mat.resume_md = mat.resume_md || buildRewrite(job).markdown;
+        }
+      }
+    }catch(e){ console.warn('投递材料生成失败，回退本地演示：', e); }
+  }
+  if(!mat) mat = buildApplyMaterial(job);
+  state.applyMaterial = mat;
+  state.applying = false;
+  render();
+  const el = document.querySelector('.ap-actions');
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  toast('投递材料已生成');
+}
+
+function markApplied(id){
+  state.applications[id] = '已投递';
+  state.quiet = true;
+  render();
+  toast('已标记为已投递，可在投递看板跟踪');
+}
+
+async function copyText(text, label){
+  try{
+    await navigator.clipboard.writeText(text);
+    toast(label + '已复制到剪贴板');
+  }catch(e){
+    toast('复制失败，请手动选择文本');
+  }
+}
+
+function copyApplyText(field){
+  const mat = state.applyMaterial;
+  if(!mat || !mat[field]) return;
+  const label = field === 'resume_md' ? '定制简历' : '求职信';
+  copyText(mat[field], label);
+}
+
+function downloadMd(content, name){
+  const blob = new Blob([content], {type:'text/markdown;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name + '.md';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function downloadApply(field, name){
+  const mat = state.applyMaterial;
+  if(!mat || !mat[field]) return;
+  downloadMd(mat[field], name);
 }
 
 /* ----- 简历诊断 ----- */

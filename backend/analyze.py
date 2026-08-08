@@ -326,3 +326,100 @@ def rewrite_resume(resume_text, job):
         "mode": "deepseek-v4-flash（真实调用）",
         "markdown": content,
     }
+
+
+APPLY_SYSTEM_PROMPT = """你是一位资深求职顾问，专精中小游戏公司（500 人以下）的求职策略。
+针对【目标岗位 JD】和【我的简历】，输出结构化 JSON，字段严格如下：
+{
+  "cover_letter": "求职信正文（Markdown，400-600 字。针对中小公司特点：强调独立完成项目的能力、一专多能、对该公司产品方向的真实热情、能快速上手；结合简历中的具体项目，避免套话）",
+  "apply_tips": ["3-5 条针对该公司的投递建议（如：官网直投 / 邮箱投递的注意点、作品集链接重要性、主动跟进节奏、附上项目过程图等）"]
+}
+硬性要求：
+1. 不得编造简历中不存在的项目或数据；
+2. 求职信必须有称呼和署名占位（如「贵公司 HR 您好」「此致敬礼 张三」），正文突出与目标岗位的匹配；
+3. 只输出 JSON，不要任何前后缀文字。"""
+
+
+def mock_apply_material(job):
+    company = job.get("company", "贵公司")
+    title = job.get("title", "目标岗位")
+    product = job.get("product", "在研项目")
+    return {
+        "jobId": job.get("id", ""),
+        "company": company,
+        "title": title,
+        "engine": MODEL,
+        "mode": "demo（未配置 DEEPSEEK_API_KEY，返回演示求职信）",
+        "cover_letter": f"""尊敬的 {company} 招聘团队：
+
+您好！我是数字媒体艺术专业 2027 届毕业生，主修游戏场景美术建模与地编方向。看到贵司正在招聘{title}岗位，非常希望能加入团队，为{product}贡献一份力量。
+
+我一直关注{company}的产品，尤其欣赏团队在美术风格上的独特坚持。作为独立游戏 / 中小团队，我认为场景美术更需要「一专多能」——既能独立完成白模验证到美术落地的全流程，也能在资源有限的条件下做出有表现力的画面。这正是我擅长的：
+
+- 基于 UE5 Landscape 独立完成 1km² 山谷地形与植被铺装，DrawCall 控制在 120 以内，兼顾画面与性能；
+- 独立完成次世代 PBR 全流程：ZBrush 高模 180 万面 → 拓扑 8 万三角面 → Substance Painter 全套贴图 → Marmoset 烘焙与 UE5 实时渲染；
+- 习惯用白模先验证玩法与动线，再推进美术落地，减少返工。
+
+作品集（ArtStation 链接）中按场景 / 道具 / 地编分类整理了完整项目，包含过程图与性能说明，方便您快速了解我的能力范围。若有机会，我非常愿意在面试中现场演示项目制作思路。
+
+感谢您抽出时间阅读，期待能有机会与贵司团队交流！
+
+此致敬礼
+张三
+2026 年 8 月""",
+        "apply_tips": [
+            f"优先通过官网投递入口提交（{job.get('link', '官网')}），中小团队通常直接看 HR 邮箱，正文务必附作品集链接。",
+            "求职信已按岗位定制：开头点明对该公司产品的了解，结尾可补充一句对具体项目的想法（如美术风格建议）。",
+            "简历中保留 2-4 个项目即可，中小团队更看重深度而非数量；把最匹配该岗位的项目放最前。",
+            "投递后 5-7 个工作日可礼貌跟进一次；附上作品集链接时确认前三张就是与该岗位最相关的作品。",
+        ],
+    }
+
+
+def build_apply_material(resume_text, job):
+    """生成针对目标岗位的求职信与投递建议（中小公司优先）。"""
+    key = load_key()
+    if not key:
+        return mock_apply_material(job)
+    payload = {
+        "model": MODEL,
+        "messages": [
+            {"role": "system", "content": APPLY_SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": "【目标岗位 JD】\n"
+                + json.dumps(job, ensure_ascii=False)
+                + "\n\n【我的简历】\n"
+                + (resume_text or "（未提供简历文本）"),
+            },
+        ],
+        "temperature": 0.5,
+        "response_format": {"type": "json_object"},
+    }
+    req = urllib.request.Request(
+        API_URL,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {key}",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode("utf-8", "ignore")[:300]
+        raise RuntimeError(f"DeepSeek API 返回 {e.code}：{detail}") from e
+    except Exception as e:  # noqa: BLE001
+        raise RuntimeError(f"DeepSeek API 调用失败：{e}") from e
+    content = data["choices"][0]["message"]["content"]
+    result = _extract_json(content)
+    result["jobId"] = job.get("id", "")
+    result["company"] = job.get("company", "目标公司")
+    result["title"] = job.get("title", "目标岗位")
+    result["engine"] = MODEL
+    result["mode"] = "deepseek-v4-flash（真实调用）"
+    result["cover_letter"] = result.get("cover_letter", "")
+    result["apply_tips"] = result.get("apply_tips", []) or []
+    return result
