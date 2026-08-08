@@ -736,7 +736,7 @@
    "applyStart": "2026-07-18",
    "applyEnd": "2026-08-13",
    "exam": "8 月中",
-   "link": "https://chillyroom.zhiye.com",
+   "link": "https://www.chillyroom.com/zh/about-us",
    "source": "官网",
    "confirmed": true,
    "keywords": [
@@ -758,8 +758,9 @@
    "applyStart": "2026-07-25",
    "applyEnd": "2026-08-22",
    "exam": "8 月下旬",
-   "link": "https://yedao.zhiye.com",
-   "source": "官网",
+   "link": "https://www.coconut.is",
+   "applyLink": "mailto:jobs@coconut.is",
+   "source": "官网/邮箱",
    "confirmed": true,
    "keywords": [
     "国风",
@@ -780,8 +781,9 @@
    "applyStart": "2026-08-02",
    "applyEnd": "2026-09-15",
    "exam": "待定",
-   "link": "https://pathea.zhiye.com",
-   "source": "官网",
+   "link": "https://www.pathea.net",
+   "applyLink": "mailto:hr@pathea.net",
+   "source": "官网/邮箱",
    "confirmed": true,
    "keywords": [
     "风格化",
@@ -802,8 +804,8 @@
    "applyStart": "2026-07-20",
    "applyEnd": "2026-08-16",
    "exam": "8 月下旬",
-   "link": "https://conchship.zhiye.com",
-   "source": "官网",
+   "link": "mailto:hr_help@conchship.net",
+   "source": "邮箱投递",
    "confirmed": true,
    "keywords": [
     "古风",
