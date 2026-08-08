@@ -1136,6 +1136,46 @@ body.quiet .reveal{animation:none;opacity:1;transform:none}
 }
 .resume-text:focus{border-color:rgba(111,191,143,.6);box-shadow:0 0 0 3px rgba(111,191,143,.12)}
 .resume-text::placeholder{color:var(--faint)}
+
+/* ----- 批量投递 ----- */
+.bp-hero{background:linear-gradient(135deg,rgba(111,191,143,.14),rgba(255,244,234,.45));border:1px solid rgba(111,191,143,.24);border-radius:16px;padding:20px 22px;margin-bottom:16px}
+.bp-hero h2{font-size:21px;margin:4px 0 0;letter-spacing:.01em}
+.bp-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.bp-bar .count{font-size:12.5px;color:var(--muted)}
+.bp-bar .count b{color:var(--mint);font-size:14px}
+.bp-list{display:flex;flex-direction:column;gap:8px}
+.bp-row{display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(135deg,rgba(111,191,143,.04),transparent 55%);cursor:pointer;transition:border-color .18s,background .18s}
+.bp-row:hover{border-color:rgba(111,191,143,.45)}
+.bp-row.on{border-color:rgba(111,191,143,.7);background:linear-gradient(135deg,rgba(111,191,143,.12),rgba(255,244,234,.25))}
+.bp-check{width:22px;height:22px;flex:none;border-radius:7px;border:1.5px solid var(--line2);display:grid;place-items:center;color:#fff;font-size:12px;font-weight:900;transition:all .15s}
+.bp-row.on .bp-check{background:var(--mint);border-color:var(--mint);color:#072019}
+.bp-info{flex:1;min-width:0}
+.bp-co{font-size:13px;font-weight:800}
+.bp-t{font-size:15px;font-weight:900;margin-top:1px}
+.bp-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:5px;font-size:11px;color:var(--muted)}
+.bp-go{flex:none;display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--cyan)}
+.bp-progress{margin:16px 0 6px}
+.bp-progress .bp-pline{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:7px}
+.bp-progress .bp-pline b{color:var(--mint)}
+.bp-track{height:10px;border-radius:99px;background:rgba(111,191,143,.12);overflow:hidden;border:1px solid rgba(111,191,143,.18)}
+.bp-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--mint),#8FE8C9);transition:width .25s ease}
+.bp-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.bp-stat{display:flex;align-items:center;gap:8px;padding:7px 13px;border-radius:99px;border:1px solid var(--line);font-size:11.5px;color:var(--muted);background:var(--panel)}
+.bp-stat b{font-size:13px;color:var(--txt)}
+.bp-stat.mint{border-color:rgba(111,191,143,.4);background:rgba(111,191,143,.08)}
+.bp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.bp-card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;padding:15px 16px;background:var(--panel);transition:border-color .18s}
+.bp-card:hover{border-color:rgba(111,191,143,.4)}
+.bp-card.done{border-color:rgba(111,191,143,.55);background:linear-gradient(160deg,rgba(111,191,143,.1),var(--panel) 55%)}
+.bp-card-top{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.bp-card .jc-logo{width:38px;height:38px;font-size:13px}
+.bp-card-co{font-size:12.5px;font-weight:800;color:var(--muted)}
+.bp-card-t{font-size:15px;font-weight:900;margin-top:2px;line-height:1.35}
+.bp-card-tips{margin:10px 0;padding:10px 12px;border-radius:10px;border:1px dashed rgba(111,191,143,.35);background:rgba(111,191,143,.05);font-size:11.5px;line-height:1.7;color:var(--muted)}
+.bp-card-tips b{display:block;font-size:10px;letter-spacing:.08em;color:var(--mint);margin-bottom:5px}
+.bp-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+.bp-actions .btn{flex:1;white-space:nowrap;font-size:11.5px;padding:8px 10px}
+.bp-note{margin-top:12px;padding:10px 13px;border-radius:10px;background:rgba(255,214,181,.13);border:1px dashed rgba(201,127,46,.3);font-size:11.5px;color:var(--muted);line-height:1.7}
 </style>
 </head>
 <body>
@@ -1202,10 +1242,11 @@ const IC = {
   work:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M2 13h20"/></svg>'
 };
 
-const BOTTOM_NAV = ['home','jobs','intern','resume','kanban','alerts'];
+const BOTTOM_NAV = ['home','jobs','apply','intern','resume','kanban'];
 const NAV = [
   {id:'home', label:'作战首页', icon:IC.home},
   {id:'jobs', label:'岗位库', icon:IC.jobs},
+  {id:'apply', label:'批量投递', icon:IC.spark},
   {id:'intern', label:'实习招聘', icon:IC.work},
   {id:'resume', label:'简历诊断', icon:IC.resume},
   {id:'kanban', label:'投递看板', icon:IC.kanban},
@@ -2509,6 +2550,11 @@ const state = {
   applyJobId:null,
   applyMaterial:null,
   applying:false,
+  batchSel:[],
+  batchMaterials:[],
+  batchRunning:false,
+  batchJobIdx:0,
+  batchOnlySmall:true,
   notifs:JSON.parse(JSON.stringify(NOTIFS)),
   applications:{
     mihoyo:'未投递', netease_gh:'未投递', hypergryph:'未投递',
@@ -2521,7 +2567,7 @@ const TITLE = {
   jobs:{t:'岗位库', s:'JOB DATABASE'},
   intern:{t:'实习招聘', s:'INTERN HIRING'},
   job:{t:'岗位详情', s:'POSITION FILE'},
-  apply:{t:'智能投递', s:'APPLY COPILOT'},
+  apply:{t:'批量投递', s:'BATCH APPLY'},
   resume:{t:'简历诊断', s:'AI RESUME LAB'},
   kanban:{t:'投递看板', s:'APPLICATION BOARD'},
   alerts:{t:'站内提醒', s:'SIGNAL CENTER'},
@@ -2608,7 +2654,7 @@ function render(){
 }
 
 function renderNav(){
-  const activeMap = {home:'home', jobs:'jobs', job:'jobs', apply:'jobs', intern:'intern', resume:'resume', kanban:'kanban', alerts:'alerts', settings:'settings'};
+  const activeMap = {home:'home', jobs:'jobs', job:'jobs', apply:'apply', intern:'intern', resume:'resume', kanban:'kanban', alerts:'alerts', settings:'settings'};
   const active = activeMap[state.curView] || 'home';
   const unread = state.notifs.filter(n=>n.unread).length;
   const badge = unread > 0 ? `<span class="badge">${unread}</span>` : '';
@@ -2675,7 +2721,7 @@ function viewHTML(view, id){
     case 'intern': return vIntern();
     case 'job': return vJobDetail(id);
     case 'resume': return vResume();
-    case 'apply': return vApply(id);
+    case 'apply': return id ? vApply(id) : vBatchApply();
     case 'kanban': return vKanban();
     case 'alerts': return vAlerts();
     case 'settings': return vSettings();
@@ -3255,6 +3301,247 @@ function downloadApply(field, name){
   const mat = state.applyMaterial;
   if(!mat || !mat[field]) return;
   downloadMd(mat[field], name);
+}
+
+/* ----- 批量投递 ----- */
+function vBatchApply(){
+  const hasResume = !!state.resumeText;
+  const list = JOBS.filter(j => isOpen(j) && (state.batchOnlySmall ? isSmallCompany(j) : true));
+  state.batchSel = state.batchSel.filter(id => list.some(j=>j.id===id));
+  const mats = state.batchMaterials.filter(m => JOBS.some(j=>j.id===m.jobId));
+  state.batchMaterials = mats;
+  const done = mats.filter(m => (state.applications[m.jobId]||'未投递') !== '未投递').length;
+  const total = state.batchSel.length;
+  const pct = total ? Math.round(Math.min(state.batchJobIdx, total) / total * 100) : 0;
+
+  return `
+  <section class="bp-hero reveal">
+    <div class="kicker">// BATCH APPLY · 一站式批量投递</div>
+    <h2>${state.batchRunning ? `正在生成 ${Math.min(state.batchJobIdx+1,total)} / ${total}：${batchCurrentName()}` : '批量投递中小公司岗位'}</h2>
+    <p class="muted" style="font-size:12.5px;margin-top:6px">勾选多家中小公司 → 一键生成定制简历 + 求职信 + 投递建议 → 逐个打开官网投递并跟踪状态。</p>
+  </section>
+
+  <div class="diag-steps reveal">
+    <div class="dstep ${hasResume?'on':''}"><div class="ds-num">1</div><div class="ds-lbl">确认简历</div></div>
+    <div class="dstep ${total?'on':''}"><div class="ds-num">2</div><div class="ds-lbl">勾选岗位</div></div>
+    <div class="dstep ${mats.length?'on':''}"><div class="ds-num">3</div><div class="ds-lbl">生成材料</div></div>
+    <div class="dstep ${mats.length?'on':''}"><div class="ds-num">4</div><div class="ds-lbl">逐个投递</div></div>
+  </div>
+
+  <div class="diag-grid">
+    <div>
+      <div class="card pad corners reveal">
+        <div class="sec-head"><h3>STEP 01 · 我的简历</h3><span class="tag">${hasResume?'READY':'NEED INPUT'}</span></div>
+        ${hasResume ? `
+          <div class="ap-resume-ok">
+            <span class="ap-ok-icon">✓</span>
+            <div style="flex:1;min-width:0">
+              <b>简历已就绪</b>
+              <div class="muted" style="font-size:11.5px;margin-top:2px">${state.resumeText.length} 字符 · 将用于为每家目标公司生成定制材料</div>
+            </div>
+            <button class="btn sm" onclick="location.hash='#/resume'">编辑简历</button>
+          </div>` : `
+          <div class="ap-resume-empty">
+            <p class="muted" style="font-size:12px;margin-bottom:12px">还没有简历文本。先去「简历诊断」粘贴或上传简历，再回来批量生成。</p>
+            <button class="btn primary" onclick="location.hash='#/resume'">${IC.doc} 去填写简历</button>
+          </div>`}
+      </div>
+
+      <div class="card pad corners reveal" style="--d:.08s;margin-top:14px">
+        <div class="sec-head"><h3>STEP 02 · 勾选岗位</h3><span class="tag">${list.length} OPEN</span></div>
+        <div class="bp-bar">
+          <span class="f-chip ${state.batchOnlySmall?'on':''}" onclick="setBatchOnly(true)">中小公司</span>
+          <span class="f-chip ${!state.batchOnlySmall?'on':''}" onclick="setBatchOnly(false)">全部岗位</span>
+          <span class="count">已选 <b>${total}</b> / ${list.length}</span>
+          <div class="spacer"></div>
+          <button class="btn sm" onclick="toggleBatchAll()">${total===list.length?'清空':'全选'}</button>
+        </div>
+        <div class="bp-list">
+          ${list.map(j=>batchRowHTML(j)).join('') || '<div class="muted" style="font-size:12px;padding:10px 2px">当前筛选下没有开放岗位</div>'}
+        </div>
+        <button class="btn primary" style="width:100%;margin-top:14px" ${hasResume && total && !state.batchRunning?'':'disabled style="opacity:.45;cursor:not-allowed"'} onclick="startBatch()">
+          ${IC.spark} 生成 ${total} 份投递材料
+        </button>
+        ${state.batchRunning ? `
+          <div class="bp-progress">
+            <div class="bp-pline"><span>正在生成：<b>${batchCurrentName()}</b></span><span>${Math.min(state.batchJobIdx+1,total)} / ${total}</span></div>
+            <div class="bp-track"><i style="width:${pct}%"></i></div>
+          </div>` : ''}
+        ${state.batchRunning ? '<div class="analysis-note"><b>提示：</b>正在按每家公司的业务与岗位要求定制材料，请稍候。</div>' : ''}
+      </div>
+    </div>
+
+    <div>
+      <div class="card pad corners reveal" style="--d:.14s">
+        <div class="sec-head"><h3>STEP 03 · 批量工作台</h3><span class="tag">BATCH DESK</span></div>
+        ${mats.length ? `
+          <div class="bp-stats">
+            <span class="bp-stat mint">已生成 <b>${mats.length}</b> 份</span>
+            <span class="bp-stat">已投递 <b>${done}</b></span>
+            <span class="bp-stat">待投递 <b>${mats.length-done}</b></span>
+            <button class="btn sm" onclick="markAllApplied()">全部标记已投递</button>
+            <button class="btn sm ghost" onclick="clearBatch()">清空重选</button>
+          </div>
+          <div class="bp-grid">${mats.map(batchCardHTML).join('')}</div>
+          <div class="bp-note">💡 每个岗位的材料都已按该公司定制。建议流程：打开官网投递入口 → 正文粘贴定制求职信 → 附件上传定制简历 → 回来标记已投递。投递后 5-7 个工作日可礼貌跟进一次。</div>
+        ` : `
+          <div class="ap-resume-empty">
+            <p class="muted" style="font-size:12px">还没有生成材料。先确认简历、勾选目标岗位，然后点击「生成 N 份投递材料」。</p>
+          </div>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+function batchRowHTML(j){
+  const on = state.batchSel.includes(j.id);
+  const st = jobStatus(j);
+  return `
+    <div class="bp-row ${on?'on':''}" onclick="toggleBatchSel('${j.id}')">
+      <div class="bp-check">${on?'✓':''}</div>
+      <div class="jc-logo" style="width:34px;height:34px;font-size:12px">${j.company.slice(0,2)}</div>
+      <div class="bp-info">
+        <div class="bp-co">${j.company}</div>
+        <div class="bp-t">${j.title}</div>
+        <div class="bp-meta">
+          <span class="chip cyan">${j.direction}</span>
+          <span class="chip">${j.city}</span>
+          <span class="chip">${j.size}</span>
+          ${j.rolling ? '<span class="chip mint">长期开放</span>' : deadlineChip(j)}
+          <span class="chip ${st.cls}">${st.label}</span>
+        </div>
+      </div>
+      <div class="bp-go" onclick="event.stopPropagation();window.open('${j.link}','_blank')">官网 ↗</div>
+    </div>`;
+}
+
+function batchCardHTML(m){
+  const j = JOBS.find(x=>x.id===m.jobId);
+  if(!j) return '';
+  const app = state.applications[j.id] || '未投递';
+  const applied = app !== '未投递';
+  const mat = m.material || {};
+  const tips = mat.apply_tips || [];
+  return `
+    <div class="bp-card ${applied?'done':''}">
+      <div class="bp-card-top">
+        <div class="jc-logo">${j.company.slice(0,2)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="bp-card-co">${j.company} · ${j.size}</div>
+          <div class="bp-card-t">${j.title}</div>
+        </div>
+        <span class="chip ${applied?'mint':''}">${applied?'已投递 ✓':'待投递'}</span>
+      </div>
+      ${tips.length ? `<div class="bp-card-tips"><b>投递建议</b>${tips.slice(0,2).map(t=>`<div>· ${t}</div>`).join('')}</div>`:''}
+      <div class="bp-actions">
+        <button class="btn primary" onclick="window.open('${j.link}','_blank')">${IC.link} 打开官网投递</button>
+        <button class="btn" onclick="copyBatch('cover_letter','${j.id}')">复制求职信</button>
+        <button class="btn" onclick="copyBatch('resume_md','${j.id}')">复制定制简历</button>
+        <button class="btn" onclick="downloadBatch('resume_md','${j.id}')">${IC.doc} 下载简历</button>
+        <button class="btn ${applied?'':'primary'}" onclick="markApplied('${j.id}')">${applied?'已投递 ✓':'标记已投递'}</button>
+      </div>
+    </div>`;
+}
+
+function setBatchOnly(v){
+  state.batchOnlySmall = !!v;
+  state.quiet = true;
+  render();
+}
+
+function toggleBatchSel(id){
+  const i = state.batchSel.indexOf(id);
+  if(i >= 0) state.batchSel.splice(i,1); else state.batchSel.push(id);
+  state.quiet = true;
+  render();
+}
+
+function toggleBatchAll(){
+  const list = JOBS.filter(j => isOpen(j) && (state.batchOnlySmall ? isSmallCompany(j) : true));
+  const allSel = list.length && list.every(j=>state.batchSel.includes(j.id));
+  state.batchSel = allSel ? [] : list.map(j=>j.id);
+  state.quiet = true;
+  render();
+}
+
+function batchCurrentName(){
+  const id = state.batchSel[state.batchJobIdx];
+  const j = id ? JOBS.find(x=>x.id===id) : null;
+  return j ? j.company + ' · ' + j.title : '准备中…';
+}
+
+async function startBatch(){
+  if(state.batchRunning) return;
+  if(!state.resumeText){ toast('请先在「简历诊断」填写简历'); return; }
+  const jobs = state.batchSel.map(id=>JOBS.find(j=>j.id===id)).filter(Boolean);
+  if(!jobs.length) return;
+  state.batchMaterials = [];
+  state.batchRunning = true;
+  state.batchJobIdx = 0;
+  render();
+  for(let i=0;i<jobs.length;i++){
+    state.batchJobIdx = i;
+    const job = jobs[i];
+    let mat = null;
+    if(state.remote){
+      try{
+        const res = await fetch('http://localhost:8001/api/apply-material', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({resume_text: state.resumeText, job})
+        });
+        if(res.ok){
+          const d = await res.json();
+          if(d.cover_letter){
+            mat = d;
+            mat.resume_md = mat.resume_md || buildRewrite(job).markdown;
+          }
+        }
+      }catch(e){ console.warn('投递材料生成失败，回退本地演示：', e); }
+    }
+    if(!mat) mat = buildApplyMaterial(job);
+    mat.jobId = job.id;
+    state.batchMaterials.push({jobId: job.id, material: mat});
+    render();
+  }
+  state.batchRunning = false;
+  state.batchJobIdx = jobs.length;
+  render();
+  toast(`已生成 ${jobs.length} 份投递材料`);
+  const el = document.querySelector('.bp-grid');
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function batchMaterialOf(id){
+  const m = state.batchMaterials.find(x=>x.jobId===id);
+  return m ? m.material : null;
+}
+
+function copyBatch(field, id){
+  const m = batchMaterialOf(id);
+  if(!m || !m[field]) return;
+  copyText(m[field], field==='resume_md' ? '定制简历' : '求职信');
+}
+
+function downloadBatch(field, id){
+  const m = batchMaterialOf(id);
+  const j = JOBS.find(x=>x.id===id);
+  if(!m || !m[field] || !j) return;
+  downloadMd(m[field], (field==='resume_md' ? '定制简历' : '求职信') + '-' + j.company);
+}
+
+function markAllApplied(){
+  state.batchMaterials.forEach(m=>{ state.applications[m.jobId] = '已投递'; });
+  state.quiet = true;
+  render();
+  toast('已全部标记为已投递');
+}
+
+function clearBatch(){
+  state.batchMaterials = [];
+  state.batchSel = [];
+  state.quiet = true;
+  render();
 }
 
 /* ----- 简历诊断 ----- */
