@@ -1,0 +1,25 @@
+# 临时运行文件
+*.pid
+tunnel_log.txt
+tunnel_url.txt
+tunnel_dbg.txt
+tunnel_check.html
+public_check.png
+
+# 环境变量与密钥（勿提交）
+.env
+backend/.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Codex 本地技能与缓存
+.agents/
+skills-lock.json
+
+# 本地数据库（可随时用采集器重建）
+backend/data.db
+
+# 工具二进制
+cloudflared.exe
