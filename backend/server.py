@@ -126,6 +126,7 @@ class Handler(BaseHTTPRequestHandler):
                         "/api/stats",
                         "POST /api/manual/add",
                         "POST /api/analyze",
+                        "POST /api/rewrite",
                     ],
                 }
             )
@@ -154,6 +155,16 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send({"error": "invalid json"}, 400)
             try:
                 result = analyze.analyze(body.get("resume_text", ""), body.get("job", {}))
+            except RuntimeError as e:
+                return self._send({"error": str(e), "mode": "deepseek-error"}, 502)
+            self._send(result)
+        elif path == "/api/rewrite":
+            try:
+                body = json.loads(raw or "{}")
+            except json.JSONDecodeError:
+                return self._send({"error": "invalid json"}, 400)
+            try:
+                result = analyze.rewrite_resume(body.get("resume_text", ""), body.get("job", {}))
             except RuntimeError as e:
                 return self._send({"error": str(e), "mode": "deepseek-error"}, 502)
             self._send(result)

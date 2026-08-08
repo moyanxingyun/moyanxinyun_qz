@@ -202,3 +202,127 @@ def analyze(resume_text, job):
         raise RuntimeError(f"DeepSeek API 调用失败：{e}") from e
     content = data["choices"][0]["message"]["content"]
     return normalize(_extract_json(content), job)
+
+
+REWRITE_SYSTEM_PROMPT = """你是一位资深游戏美术 HR 顾问兼简历润色专家，精通针对 JD 的简历定制。
+请基于【我的简历】内容，针对【目标岗位 JD】输出一份完整改写后的 Markdown 简历，规则如下：
+1. 不得凭空编造项目细节，所有叙事必须基于用户提供的简历内容；信息不足处用「待补充」标注。
+2. 结构必须完整：基本信息（姓名/联系方式用占位符）→ 求职意向（针对目标岗位）→ 教育背景 → 技能清单（按 JD 优先级重排，最相关的技能放最前）→ 项目经历（从简历中挑选 2-4 个与 JD 最匹配的项目，重写 bullet，措辞贴近 JD 语言，突出个人决策与量化结果）→ 作品集 → 自我评价。
+3. 项目经历每个项目 2-3 条 bullet，以动词开头，量化优先。
+4. 在简历末尾另起一节【修改说明】，列出：改了什么、为什么改、用了哪些项目、排除了哪些经历及原因。
+只输出 Markdown 正文，不要任何前后缀文字。"""
+
+
+def mock_rewrite(job):
+    company = job.get("company", "目标公司")
+    title = job.get("title", "目标岗位")
+    return {
+        "jobId": job.get("id", ""),
+        "company": company,
+        "title": title,
+        "engine": MODEL,
+        "mode": "demo（未配置 DEEPSEEK_API_KEY，返回演示简历）",
+        "markdown": f"""# 张三 · 游戏场景美术 / 地编
+
+**求职意向**：{company} · {title}
+**电话**：待补充　**邮箱**：待补充　**作品集**：ArtStation 链接待补充
+
+---
+
+## 教育背景
+
+**数字媒体艺术专业** · 本科 · 2027 届
+
+---
+
+## 技能清单
+
+- **UE5 / Landscape**：地形编辑、植被铺装、LOD 分层、性能优化
+- **PBR 全流程**：Maya / Blender 建模、ZBrush 高模、Substance Painter 贴图、Marmoset 烘焙
+- **地编落地**：白模 → Blockout → 美术落地，DrawCall 与面数控制
+
+---
+
+## 项目经历
+
+### 开放世界小镇地编（课程项目）
+*对应「地形编辑 / 大世界」要求*
+
+- 基于 UE5 Landscape 完成 1km² 山谷地形与植被铺装，DrawCall 控制在 120 以内
+- 独立完成白模验证到美术落地的地编全流程，输出 LOD 分层与性能说明
+
+### 废弃车站场景（个人项目）
+*对应「次世代 PBR 流程 / 场景搭建」要求*
+
+- ZBrush 高模精雕 180 万面 → 拓扑至 8 万三角面，Substance Painter 输出全套 PBR 贴图
+- Marmoset 烘焙 AO/Normal/Curvature，UE5 实时渲染 3 个时段氛围对比图
+
+---
+
+## 作品集
+
+- ArtStation：场景 / 道具 / 地编分类展示（链接待补充）
+- 含白模 → 成品的过程图与性能说明
+
+---
+
+## 自我评价
+
+热爱游戏场景美术与地编，习惯用白模先验证玩法再推进美术落地，注重资源复用与性能表现。
+
+---
+
+## 修改说明
+
+- **结构调整**：技能区前移，把 UE5 / Landscape 提到第一行，突出目标岗位最看重的地编能力。
+- **项目挑选**：选用「开放世界小镇地编」（对应地形编辑要求）和「废弃车站场景」（对应 PBR / 场景搭建要求）；排除「UI 图标绘制练习」，与场景美术方向匹配度低。
+- **措辞改写**：所有 bullet 改为动词开头、量化表达，贴近 JD 语言（如「完成 1km² 山谷地形」「DrawCall 控制在 120 以内」）。
+- **待补充**：姓名、联系方式、作品集链接、教育经历细节请按你的真实信息补全。"""
+    }
+
+
+def rewrite_resume(resume_text, job):
+    """针对 JD 直接输出整份改写后的 Markdown 简历。"""
+    key = load_key()
+    if not key:
+        return mock_rewrite(job)
+    payload = {
+        "model": MODEL,
+        "messages": [
+            {"role": "system", "content": REWRITE_SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": "【目标岗位 JD】\n"
+                + json.dumps(job, ensure_ascii=False)
+                + "\n\n【我的简历】\n"
+                + (resume_text or "（未提供简历文本）"),
+            },
+        ],
+        "temperature": 0.5,
+    }
+    req = urllib.request.Request(
+        API_URL,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {key}",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode("utf-8", "ignore")[:300]
+        raise RuntimeError(f"DeepSeek API 返回 {e.code}：{detail}") from e
+    except Exception as e:  # noqa: BLE001
+        raise RuntimeError(f"DeepSeek API 调用失败：{e}") from e
+    content = data["choices"][0]["message"]["content"].strip()
+    return {
+        "jobId": job.get("id", ""),
+        "company": job.get("company", "目标公司"),
+        "title": job.get("title", "目标岗位"),
+        "engine": MODEL,
+        "mode": "deepseek-v4-flash（真实调用）",
+        "markdown": content,
+    }

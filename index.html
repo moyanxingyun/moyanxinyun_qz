@@ -530,6 +530,26 @@ a{color:inherit;text-decoration:none}
 .pp-ex-title{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--amber);margin-bottom:6px}
 .pp-ex-item{font-size:12px;color:var(--muted);line-height:1.7}
 .pp-ex-item b{color:var(--txt)}
+.rewrite-intro{font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:13px;padding:11px 14px;border-radius:9px;background:rgba(111,191,143,.07);border:1px dashed rgba(111,191,143,.3)}
+.rewrite-actions{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.rewrite-loading{padding:18px;border-radius:11px;border:1px solid var(--line);text-align:center}
+.rl-line{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.rewrite-paper{
+  background:#FFFDF9;border:1px solid var(--line);border-radius:12px;padding:22px 24px;
+  box-shadow:0 6px 24px rgba(190,150,110,.08);font-size:13px;line-height:1.85;color:#2E2A26;
+}
+.rewrite-paper h3{font-size:17px;margin:0 0 6px;letter-spacing:.02em}
+.rewrite-paper h4{font-size:14px;margin:16px 0 7px;color:#B4772F;letter-spacing:.05em;border-bottom:1px solid rgba(180,119,47,.18);padding-bottom:4px}
+.rewrite-paper h5{font-size:13px;margin:13px 0 5px}
+.rewrite-paper p{margin:5px 0}
+.rewrite-paper ul,.rewrite-paper ol{margin:6px 0 10px;padding-left:20px}
+.rewrite-paper li{margin:4px 0}
+.rewrite-paper hr{border:none;border-top:1px dashed rgba(190,150,110,.35);margin:14px 0}
+.rewrite-paper code{background:rgba(111,191,143,.12);padding:1px 5px;border-radius:4px;font-size:11.5px;font-family:var(--mono)}
+.rewrite-note{margin-top:10px;font-size:11px;color:var(--faint)}
+.btn.ghost{background:transparent;border:1px solid var(--line2);color:var(--muted)}
+.btn.ghost:hover{border-color:var(--mint);color:var(--txt)}
+@keyframes indet{0%{transform:translateX(-30%)}50%{transform:translateX(30%)}100%{transform:translateX(-30%)}}
 .check-item{display:flex;align-items:flex-start;gap:10px;padding:9px 2px;border-bottom:1px dashed var(--line);font-size:13px}
 .check-item:last-child{border-bottom:none}
 .check-item .cb{
@@ -2451,6 +2471,8 @@ const state = {
   analysisJobId:null,
   report:null,
   analyzing:false,
+  rewrite:null,
+  rewriting:false,
   notifs:JSON.parse(JSON.stringify(NOTIFS)),
   applications:{
     mihoyo:'未投递', netease_gh:'未投递', hypergryph:'未投递',
@@ -3314,6 +3336,27 @@ function reportHTML(r){
           <div><div class="ct">${p.item}</div><div class="chk-lbl">${p.done?'DONE':'TO-DO'}</div></div>
         </div>`).join('')}
     </div>
+
+    <div class="card pad corners reveal" style="--d:.22s">
+      <div class="sec-head"><h3>直接修改整份简历</h3><span class="tag">JOB HUNT COPILOT · REWRITE</span></div>
+      <div class="rewrite-intro">
+        基于上面的诊断，AI 会针对 ${r.company} 的岗位要求把整份简历改写为可直接投递的版本：
+        调整结构、重写项目描述、重排技能清单，并附修改说明。
+      </div>
+      ${state.rewriting ? `
+        <div class="rewrite-loading">
+          <div class="rl-line">正在为你改写整份简历…（挑选项目 → 重写 bullet → 调整结构）</div>
+          <div class="bar"><i style="width:62%;animation:indet 1.4s ease-in-out infinite"></i></div>
+        </div>` : (state.rewrite && state.rewrite.jobId === r.jobId) ? `
+        <div class="rewrite-actions">
+          <button class="btn sm" onclick="copyRewrite()">复制全文</button>
+          <button class="btn sm primary" onclick="downloadRewrite()">${IC.doc} 下载 .md</button>
+          <button class="btn sm ghost" onclick="startRewrite()">重新生成</button>
+        </div>
+        <div class="rewrite-paper">${mdToHtml(state.rewrite.markdown)}</div>
+        <div class="rewrite-note">引擎：${state.rewrite.mode} · 请核对后替换姓名、联系方式、作品集链接等真实信息</div>` : `
+        <button class="btn primary" style="width:100%" onclick="startRewrite()">${IC.spark} 生成修改版简历</button>`}
+    </div>
   </div>`;
 }
 
@@ -3357,6 +3400,162 @@ function exportReport(){
   a.click();
   URL.revokeObjectURL(a.href);
   toast('报告已导出（Markdown）');
+}
+
+/* ----- 直接修改整份简历（Job Hunt Copilot） ----- */
+function buildRewrite(job){
+  return {
+    jobId: job.id,
+    company: job.company,
+    title: job.title,
+    engine: 'deepseek-v4-flash',
+    mode: 'demo（未配置 DEEPSEEK_API_KEY，返回演示简历）',
+    markdown: [
+      '# 张三 · 游戏场景美术 / 地编',
+      '',
+      `**求职意向**：${job.company} · ${job.title}`,
+      '**电话**：待补充　**邮箱**：待补充　**作品集**：ArtStation 链接待补充',
+      '',
+      '---',
+      '',
+      '## 教育背景',
+      '',
+      '**数字媒体艺术专业** · 本科 · 2027 届',
+      '',
+      '---',
+      '',
+      '## 技能清单',
+      '',
+      '- **UE5 / Landscape**：地形编辑、植被铺装、LOD 分层、性能优化',
+      '- **PBR 全流程**：Maya / Blender 建模、ZBrush 高模、Substance Painter 贴图、Marmoset 烘焙',
+      '- **地编落地**：白模 → Blockout → 美术落地，DrawCall 与面数控制',
+      '',
+      '---',
+      '',
+      '## 项目经历',
+      '',
+      '### 开放世界小镇地编（课程项目）',
+      '*对应「地形编辑 / 大世界」要求*',
+      '',
+      '- 基于 UE5 Landscape 完成 1km² 山谷地形与植被铺装，DrawCall 控制在 120 以内',
+      '- 独立完成白模验证到美术落地的地编全流程，输出 LOD 分层与性能说明',
+      '',
+      '### 废弃车站场景（个人项目）',
+      '*对应「次世代 PBR 流程 / 场景搭建」要求*',
+      '',
+      '- ZBrush 高模精雕 180 万面 → 拓扑至 8 万三角面，Substance Painter 输出全套 PBR 贴图',
+      '- Marmoset 烘焙 AO/Normal/Curvature，UE5 实时渲染 3 个时段氛围对比图',
+      '',
+      '---',
+      '',
+      '## 作品集',
+      '',
+      '- ArtStation：场景 / 道具 / 地编分类展示（链接待补充）',
+      '- 含白模 → 成品的过程图与性能说明',
+      '',
+      '---',
+      '',
+      '## 自我评价',
+      '',
+      '热爱游戏场景美术与地编，习惯用白模先验证玩法再推进美术落地，注重资源复用与性能表现。',
+      '',
+      '---',
+      '',
+      '## 修改说明',
+      '',
+      '- **结构调整**：技能区前移，把 UE5 / Landscape 提到第一行，突出目标岗位最看重的地编能力。',
+      '- **项目挑选**：选用「开放世界小镇地编」（对应地形编辑要求）和「废弃车站场景」（对应 PBR / 场景搭建要求）；排除「UI 图标绘制练习」，与场景美术方向匹配度低。',
+      '- **措辞改写**：所有 bullet 改为动词开头、量化表达，贴近 JD 语言（如「完成 1km² 山谷地形」「DrawCall 控制在 120 以内」）。',
+      '- **待补充**：姓名、联系方式、作品集链接、教育经历细节请按你的真实信息补全。'
+    ].join('\n')
+  };
+}
+
+async function startRewrite(){
+  if(state.rewriting || !state.analysisJobId) return;
+  state.rewriting = true;
+  state.rewrite = null;
+  render();
+  const job = JOBS.find(j=>j.id===state.analysisJobId);
+  let rw = null;
+  if(state.remote){
+    try{
+      const res = await fetch('http://localhost:8001/api/rewrite', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({resume_text: state.resumeText || '', job})
+      });
+      if(res.ok) rw = await res.json();
+    }catch(e){
+      console.warn('简历改写后端调用失败，回退本地演示：', e);
+    }
+  }
+  if(!rw) rw = buildRewrite(job);
+  state.rewrite = rw;
+  state.rewriting = false;
+  render();
+  const el = document.querySelector('.rewrite-paper');
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  toast('修改版简历已生成');
+}
+
+function inlineMd(s){
+  return esc(s)
+    .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+    .replace(/\*(.+?)\*/g,'<i>$1</i>')
+    .replace(/`(.+?)`/g,'<code>$1</code>');
+}
+
+function mdToHtml(md){
+  const lines = String(md||'').split('\n');
+  let html = '', list = '';
+  const closeList = ()=>{ if(list){ html += list + '</ul>'; list = ''; } };
+  lines.forEach(line=>{
+    const t = line.trim();
+    if(t.startsWith('### ')){
+      closeList(); html += `<h5>${inlineMd(t.slice(4))}</h5>`;
+    } else if(t.startsWith('## ')){
+      closeList(); html += `<h4>${inlineMd(t.slice(3))}</h4>`;
+    } else if(t.startsWith('# ')){
+      closeList(); html += `<h3>${inlineMd(t.slice(2))}</h3>`;
+    } else if(/^[-*•] /.test(t)){
+      if(!list){ list = '<ul>'; }
+      list += `<li>${inlineMd(t.replace(/^[-*•] /,''))}</li>`;
+    } else if(/^\d+\. /.test(t)){
+      if(!list){ list = '<ol>'; }
+      list += `<li>${inlineMd(t.replace(/^\d+\. /,''))}</li>`;
+    } else if(/^(-{3,}|\*{3,})$/.test(t)){
+      closeList(); html += '<hr>';
+    } else if(t === ''){
+      closeList();
+    } else {
+      closeList(); html += `<p>${inlineMd(t)}</p>`;
+    }
+  });
+  closeList();
+  return html;
+}
+
+async function copyRewrite(){
+  if(!state.rewrite || !state.rewrite.markdown) return;
+  try{
+    await navigator.clipboard.writeText(state.rewrite.markdown);
+    toast('修改版简历已复制到剪贴板');
+  }catch(e){
+    toast('复制失败，请手动选择文本复制');
+  }
+}
+
+function downloadRewrite(){
+  const rw = state.rewrite;
+  if(!rw || !rw.markdown) return;
+  const blob = new Blob([rw.markdown], {type:'text/markdown;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `定制简历-${rw.company}.md`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('修改版简历已下载（Markdown）');
 }
 
 /* ----- 投递看板 ----- */
