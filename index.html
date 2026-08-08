@@ -216,6 +216,7 @@ a{color:inherit;text-decoration:none}
   padding:3px 9px;border-radius:99px;
   border:1px solid var(--line2);color:var(--muted);
   background:rgba(255,255,255,.025);white-space:nowrap;
+  max-width:100%;
 }
 .chip.mint{border-color:rgba(75,230,181,.35);color:var(--mint);background:rgba(75,230,181,.07)}
 .chip.amber{border-color:rgba(242,184,75,.35);color:var(--amber);background:rgba(242,184,75,.07)}
@@ -439,10 +440,12 @@ a{color:inherit;text-decoration:none}
 .dstep .ds-lbl{font-size:12px;color:var(--muted);font-weight:700}
 .dstep.on .ds-lbl{color:var(--txt)}
 .diag-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.diag-grid>div{min-width:0}
 .upload-zone{
   border:1.5px dashed var(--line2);border-radius:13px;padding:38px 22px;
   text-align:center;cursor:pointer;
   background:rgba(255,255,255,.012);
+  max-width:100%;
 }
 .upload-zone:hover{border-color:rgba(75,230,181,.5);background:rgba(75,230,181,.025)}
 .upload-zone svg{width:34px;height:34px;color:var(--mint);margin-bottom:10px}
@@ -460,7 +463,7 @@ a{color:inherit;text-decoration:none}
 .file-picked .x:hover{color:var(--red)}
 .job-pick-list{max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:7px;padding-right:4px}
 .job-pick{
-  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;
+  min-width:0;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;
   border:1px solid var(--line);cursor:pointer;background:rgba(255,255,255,.012);
 }
 .job-pick:hover{border-color:var(--line2)}
@@ -709,6 +712,7 @@ a{color:inherit;text-decoration:none}
   .jd-hero h2{font-size:18px}
   .report-head{flex-wrap:wrap}
   .report-head .rh-actions{margin-left:0;width:100%}
+  .chip{white-space:normal;text-align:left}
 }
 </style>
 <style>
@@ -1101,6 +1105,7 @@ body.quiet .reveal{animation:none;opacity:1;transform:none}
 .resume-text{
   width:100%;margin-top:12px;border:1px solid rgba(190,150,110,.24);border-radius:14px;
   background:#FFFBF6;color:var(--txt);padding:12px 14px;
+  max-width:100%;
   font-family:var(--sans);font-size:12.5px;line-height:1.7;resize:vertical;outline:none;
   transition-property:border-color,box-shadow;transition-duration:.2s;transition-timing-function:ease;
 }
