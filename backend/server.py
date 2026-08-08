@@ -67,6 +67,51 @@ def companies():
     return sorted(seen.values(), key=lambda x: x["company"])
 
 
+def extract_resume_text(name, data_b64):
+    """从 PDF / Word(.docx) / txt 中提取简历文本。返回 (text, mode)。"""
+    import base64
+    import io
+    import re
+    import zipfile
+
+    raw = base64.b64decode(data_b64 or "")
+    lower = (name or "").lower()
+    if lower.endswith(".pdf"):
+        try:
+            import pdfplumber
+        except ImportError:
+            raise RuntimeError("PDF 解析库未安装：pip install pdfplumber")
+        with pdfplumber.open(io.BytesIO(raw)) as pdf:
+            pages = [p.extract_text() or "" for p in pdf.pages]
+        return "\n".join(pages), "pdf"
+    if lower.endswith(".docx"):
+        try:
+            with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                xml = z.read("word/document.xml").decode("utf-8", "ignore")
+        except KeyError:
+            raise RuntimeError("该 .docx 文件缺少正文结构，请另存为 .docx 或直接粘贴文本")
+        xml = xml.replace("</w:p>", "\n").replace("</w:tr>", "\n")
+        text = re.sub(r"<[^>]+>", "", xml)
+        for a, b in (
+            ("&amp;", "&"),
+            ("&lt;", "<"),
+            ("&gt;", ">"),
+            ("&quot;", '"'),
+            ("&#39;", "'"),
+        ):
+            text = text.replace(a, b)
+        lines = [ln.strip() for ln in text.splitlines()]
+        return "\n".join(l for l in lines if l), "docx"
+    if lower.endswith((".txt", ".md", ".csv")):
+        for enc in ("utf-8-sig", "utf-8", "gbk"):
+            try:
+                return raw.decode(enc), "text"
+            except (UnicodeDecodeError, LookupError):
+                continue
+        return raw.decode("utf-8", "ignore"), "text"
+    raise RuntimeError("暂不支持该格式，请使用 PDF / Word(.docx) / txt")
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *args):
         pass
@@ -128,6 +173,7 @@ class Handler(BaseHTTPRequestHandler):
                         "POST /api/analyze",
                         "POST /api/rewrite",
                         "POST /api/apply-material",
+                        "POST /api/extract-resume",
                     ],
                 }
             )
@@ -179,6 +225,15 @@ class Handler(BaseHTTPRequestHandler):
             except RuntimeError as e:
                 return self._send({"error": str(e), "mode": "deepseek-error"}, 502)
             self._send(result)
+        elif path == "/api/extract-resume":
+            try:
+                body = json.loads(raw or "{}")
+                text, mode = extract_resume_text(body.get("name", ""), body.get("data", ""))
+            except json.JSONDecodeError:
+                return self._send({"error": "invalid json"}, 400)
+            except Exception as e:  # noqa: BLE001
+                return self._send({"error": str(e)}, 400)
+            self._send({"text": text[:8000], "mode": mode, "chars": len(text)})
         else:
             self._send({"error": "not found"}, 404)
 

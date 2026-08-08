@@ -2550,6 +2550,7 @@ const state = {
   applyJobId:null,
   applyMaterial:null,
   applying:false,
+  extracting:false,
   batchSel:[],
   batchMaterials:[],
   batchRunning:false,
@@ -3091,7 +3092,7 @@ function vApply(id){
   if(!j) return '<div class="card pad">岗位不存在</div>';
   if(state.applyJobId !== j.id) state.applyJobId = j.id;
   const small = isSmallCompany(j);
-  const hasResume = !!state.resumeText;
+  const hasResume = !!(state.resumeText || state.resumeFile);
   const mat = state.applyMaterial && state.applyMaterial.jobId === j.id ? state.applyMaterial : null;
   const appState = state.applications[j.id] || '未投递';
 
@@ -3143,7 +3144,8 @@ function vApply(id){
             <span class="ap-ok-icon">✓</span>
             <div style="flex:1;min-width:0">
               <b>简历已就绪</b>
-              <div class="muted" style="font-size:11.5px;margin-top:2px">${state.resumeText.length} 字符 · 将用于生成定制简历与求职信</div>
+              <div class="muted" style="font-size:11.5px;margin-top:2px">${state.resumeText ? state.resumeText.length + ' 字符 · 将用于生成定制简历与求职信' : (state.extracting ? '正在解析 ' + state.resumeFile.name + ' 的文字…' : '已上传 ' + state.resumeFile.name + '（' + state.resumeFile.size + '）· 文本待补充')}</div>
+              ${!state.resumeText && !state.extracting ? '<div class="muted" style="font-size:11px;margin-top:4px;color:var(--amber)">⚠ 还没提取到简历文字，请点「编辑简历」直接粘贴文本后即可生成</div>' : ''}
             </div>
             <button class="btn sm" onclick="location.hash='#/resume'">编辑简历</button>
           </div>` : `
@@ -3233,7 +3235,11 @@ function buildApplyMaterial(job){
 }
 
 async function generateApplyMaterial(){
-  if(state.applying || !state.applyJobId || !state.resumeText) return;
+  if(state.applying || !state.applyJobId || !(state.resumeText || state.resumeFile)) return;
+  if(!state.resumeText && state.resumeFile && state.resumeFile.raw){
+    await extractResumeFile(state.resumeFile.raw);
+  }
+  if(!state.resumeText){ toast('请先在「简历诊断」粘贴简历文本'); return; }
   const job = JOBS.find(x=>x.id===state.applyJobId) || JOBS[0];
   if(!job) return;
   state.applying = true;
@@ -3305,7 +3311,7 @@ function downloadApply(field, name){
 
 /* ----- 批量投递 ----- */
 function vBatchApply(){
-  const hasResume = !!state.resumeText;
+  const hasResume = !!(state.resumeText || state.resumeFile);
   const list = JOBS.filter(j => isOpen(j) && (state.batchOnlySmall ? isSmallCompany(j) : true));
   state.batchSel = state.batchSel.filter(id => list.some(j=>j.id===id));
   const mats = state.batchMaterials.filter(m => JOBS.some(j=>j.id===m.jobId));
@@ -3337,7 +3343,8 @@ function vBatchApply(){
             <span class="ap-ok-icon">✓</span>
             <div style="flex:1;min-width:0">
               <b>简历已就绪</b>
-              <div class="muted" style="font-size:11.5px;margin-top:2px">${state.resumeText.length} 字符 · 将用于为每家目标公司生成定制材料</div>
+              <div class="muted" style="font-size:11.5px;margin-top:2px">${state.resumeText ? state.resumeText.length + ' 字符 · 将用于为每家目标公司生成定制材料' : (state.extracting ? '正在解析 ' + state.resumeFile.name + ' 的文字…' : '已上传 ' + state.resumeFile.name + '（' + state.resumeFile.size + '）· 文本待补充')}</div>
+              ${!state.resumeText && !state.extracting ? '<div class="muted" style="font-size:11px;margin-top:4px;color:var(--amber)">⚠ 还没提取到简历文字，请点「编辑简历」直接粘贴文本后即可生成</div>' : ''}
             </div>
             <button class="btn sm" onclick="location.hash='#/resume'">编辑简历</button>
           </div>` : `
@@ -3472,7 +3479,10 @@ function batchCurrentName(){
 
 async function startBatch(){
   if(state.batchRunning) return;
-  if(!state.resumeText){ toast('请先在「简历诊断」填写简历'); return; }
+  if(!state.resumeText && state.resumeFile && state.resumeFile.raw){
+    await extractResumeFile(state.resumeFile.raw);
+  }
+  if(!state.resumeText){ toast('请先在「简历诊断」粘贴简历文本'); return; }
   const jobs = state.batchSel.map(id=>JOBS.find(j=>j.id===id)).filter(Boolean);
   if(!jobs.length) return;
   state.batchMaterials = [];
@@ -3568,7 +3578,7 @@ function vResume(){
             <div class="fi">${IC.doc}</div>
             <div style="flex:1;min-width:0">
               <div class="fn">${esc(state.resumeFile.name)}</div>
-              <div class="fm">${state.resumeFile.size}${/\.(txt|md)$/i.test(state.resumeFile.name)?' · 文本已读取':' · PDF/Word 文本提取将在正式版支持'}</div>
+              <div class="fm">${state.resumeFile.size}${/\.(txt|md)$/i.test(state.resumeFile.name)?' · 文本已读取':(state.resumeText?' · 文本已解析':(state.extracting?' · 正在解析文字…':' · 文本待补充，可直接粘贴文本'))}</div>
             </div>
             <span class="x" onclick="removeFile()">×</span>
           </div>` : `
@@ -3576,7 +3586,7 @@ function vResume(){
             <input type="file" style="display:none" onchange="handleUpload(this)">
             ${IC.upload}
             <h4>拖入或点击上传简历</h4>
-            <p>支持 PDF / Word / txt · 本地解析，不会上传到别处</p>
+            <p>支持 PDF / Word / txt · 连接数据服务后自动解析文字</p>
           </label>`}
         <textarea id="resumeText" class="resume-text" rows="6" placeholder="或直接把简历文字粘贴到这里（教育 / 技能软件 / 项目经历 / 作品集链接）。文本版分析最准，推荐使用。" oninput="state.resumeText=this.value;updateDiagStep()">${esc(state.resumeText||'')}</textarea>
       </div>
@@ -3617,7 +3627,7 @@ function handleUpload(input){
   const file = input.files && input.files[0];
   if(!file) return;
   const size = file.size > 1048576 ? (file.size/1048576).toFixed(1)+' MB' : Math.max(1,Math.round(file.size/1024))+' KB';
-  state.resumeFile = {name:file.name, size};
+  state.resumeFile = {name:file.name, size, raw:file};
   state.report = null;
   if(/\.(txt|md)$/i.test(file.name)){
     const reader = new FileReader();
@@ -3627,10 +3637,44 @@ function handleUpload(input){
       toast('已读取简历文本');
     };
     reader.readAsText(file);
+  } else if(state.remote){
+    extractResumeFile(file);
   } else {
     render();
-    toast('已选择文件：PDF/Word 文本提取将在正式版支持，可同时粘贴文本');
+    toast('已选择文件：请同时粘贴简历文本（连接数据服务后支持 PDF/Word 自动解析）');
   }
+}
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const r = new FileReader();
+    r.onload = () => resolve(String(r.result).split(',')[1] || '');
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+async function extractResumeFile(file){
+  state.extracting = true;
+  render();
+  try{
+    const data = await fileToBase64(file);
+    const res = await fetch('http://localhost:8001/api/extract-resume', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({name:file.name, data})
+    });
+    const d = await res.json();
+    if(d && d.text && d.text.trim().length >= 10){
+      state.resumeText = String(d.text).slice(0, 8000);
+      toast('已解析 ' + file.name + ' · ' + d.mode);
+    } else {
+      toast((d && d.error) || '未能解析该文件，请直接粘贴简历文本');
+    }
+  }catch(e){
+    console.warn('简历解析失败：', e);
+    toast('解析服务不可用，请直接粘贴简历文本');
+  }
+  state.extracting = false;
+  render();
 }
 function updateDiagStep(){
   const d = document.querySelectorAll('.dstep');
