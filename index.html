@@ -516,6 +516,20 @@ a{color:inherit;text-decoration:none}
   border-left:2px solid var(--line2);padding-left:9px;
 }
 .sugg .s-example b{color:var(--amber);font-weight:700}
+.proj-pick{padding:14px 16px;border:1px solid var(--line);border-radius:11px;margin-bottom:11px;background:linear-gradient(135deg,rgba(111,191,143,.06),transparent 65%)}
+.proj-pick:last-of-type{margin-bottom:0}
+.pp-head{display:flex;align-items:flex-start;gap:11px;margin-bottom:10px}
+.pp-n{flex:none;width:23px;height:23px;border-radius:50%;background:var(--mint);color:#072019;font-weight:800;font-size:12px;display:grid;place-items:center;font-family:var(--mono)}
+.pp-mid{flex:1;min-width:0}
+.pp-name{font-size:13.5px;display:block}
+.pp-reason{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.pp-bullets{display:flex;flex-direction:column;gap:7px;padding-left:34px}
+.pp-bullet{font-size:12.5px;line-height:1.7;color:var(--txt);display:flex;gap:8px}
+.pp-dot{color:var(--mint);font-weight:800;flex:none}
+.pp-excluded{margin-top:12px;padding:12px 15px;border-radius:10px;background:rgba(255,214,181,.12);border:1px dashed rgba(201,127,46,.35)}
+.pp-ex-title{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--amber);margin-bottom:6px}
+.pp-ex-item{font-size:12px;color:var(--muted);line-height:1.7}
+.pp-ex-item b{color:var(--txt)}
 .check-item{display:flex;align-items:flex-start;gap:10px;padding:9px 2px;border-bottom:1px dashed var(--line);font-size:13px}
 .check-item:last-child{border-bottom:none}
 .check-item .cb{
@@ -1742,7 +1756,7 @@ let JOBS = [
   {"id": "netease-PO1000085", "company": "网易雷火", "product": "《逆水寒》《永劫无间》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "杭州", "direction": "非美术", "title": "游戏安全开发工程师", "applyStart": "2026-07-22", "applyEnd": "2026-10-15", "exam": "", "link": "https://campus.163.com/app/detail/index?id=3736&projectId=77", "source": "官网", "confirmed": true, "keywords": [], "note": "全职 · 雷火事业群", "rolling": false},
   {"id": "netease-PO1000127", "company": "网易雷火", "product": "《逆水寒》《永劫无间》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "杭州", "direction": "非美术", "title": "嵌入式开发工程师", "applyStart": "2026-07-22", "applyEnd": "2026-10-15", "exam": "", "link": "https://campus.163.com/app/detail/index?id=4703&projectId=77", "source": "官网", "confirmed": true, "keywords": [], "note": "全职 · 伏羲机器人", "rolling": false},
   {"id": "netease-PO1000126", "company": "网易雷火", "product": "《逆水寒》《永劫无间》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "杭州", "direction": "美术（其他）", "title": "游戏AI产品经理", "applyStart": "2026-07-22", "applyEnd": "2026-10-15", "exam": "", "link": "https://campus.163.com/app/detail/index?id=4702&projectId=77", "source": "官网", "confirmed": true, "keywords": [], "note": "全职 · 雷火事业群", "rolling": false}
-]
+];
 
 let INTERNS = [
   {"id": "hg-int", "company": "鹰角网络", "product": "《明日方舟》《来自星尘》", "business": "游戏研发", "size": "1000-4999 人", "city": "上海", "direction": "场景美术", "title": "3D 场景实习生", "applyStart": "2026-07-20", "applyEnd": "长期", "rolling": true, "note": "28 届及以后", "link": "https://career.hypergryph.com", "source": "官网", "confirmed": true, "keywords": ["二次元", "风格化", "Maya", "Substance Painter"]},
@@ -2415,7 +2429,7 @@ let INTERNS = [
   {"id": "tencent--4", "company": "腾讯 IEG", "product": "《王者荣耀》《和平精英》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "深圳总部", "direction": "美术（其他）", "title": "项目实习生-设计", "applyStart": "", "applyEnd": "", "exam": "", "link": "https://join.qq.com/post.html", "source": "官网", "confirmed": true, "keywords": [], "note": "项目实习生 · 截止时间以官网为准", "rolling": true},
   {"id": "tencent--5", "company": "腾讯 IEG", "product": "《王者荣耀》《和平精英》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "深圳总部 北京 上海 广州", "direction": "非美术", "title": "项目实习生-市场", "applyStart": "", "applyEnd": "", "exam": "", "link": "https://join.qq.com/post.html", "source": "官网", "confirmed": true, "keywords": [], "note": "项目实习生 · 截止时间以官网为准", "rolling": true},
   {"id": "tencent--6", "company": "腾讯 IEG", "product": "《王者荣耀》《和平精英》", "business": "游戏研发/发行", "size": "10000 人以上", "city": "深圳总部 北京", "direction": "非美术", "title": "项目实习生-职能", "applyStart": "", "applyEnd": "", "exam": "", "link": "https://join.qq.com/post.html", "source": "官网", "confirmed": true, "keywords": [], "note": "项目实习生 · 截止时间以官网为准", "rolling": true}
-]
+];
 
 const NOTIFS = [
   {type:'new', title:'新岗位上线', body:'三七互娱 · 场景原画/模型（广州）8 月 10 日截止网申', time:'今天 09:12', jobId:'games37', unread:true},
@@ -3183,7 +3197,29 @@ function buildReport(job){
     {item:'附 LOD / 面数 / 性能说明', done:false},
     {item:'作品数量 6-12 个精选，宁缺毋滥', done:false}
   ];
-  return {jobId:job.id, company:job.company, title:job.title, overall, overallTxt, dims, hit, miss, suggestions, portfolio};
+  const pickedProjects = [
+    {
+      name:'开放世界小镇地编（课程项目）',
+      reason:'对应 JD「地形编辑 / 大世界」核心要求',
+      bullets:[
+        '基于 UE5 Landscape 完成 1km² 山谷地形与植被铺装，DrawCall 控制在 120 以内',
+        '独立完成白模验证到美术落地的地编全流程，输出 LOD 分层与性能说明'
+      ]
+    },
+    {
+      name:'废弃车站场景（个人项目）',
+      reason:'对应 JD「次世代 PBR 流程 / 场景搭建」要求',
+      bullets:[
+        'ZBrush 高模精雕 180 万面 → 拓扑至 8 万三角面，Substance Painter 输出全套 PBR 贴图',
+        'Marmoset 烘焙 AO/Normal/Curvature，最终 UE5 实时渲染 3 个时段氛围对比图'
+      ]
+    }
+  ];
+  const excluded = [
+    {name:'UI 图标绘制练习', reason:'与目标岗位（场景美术/地编）匹配度低，建议压缩篇幅'}
+  ];
+  const structure = '建议技能区前移：将「UE5 / Landscape / 地形地编」提到技能第一行；项目经历按本报告 pickedProjects 的顺序重排；删除与场景美术无关的社团经历，压缩至半行以内。';
+  return {jobId:job.id, company:job.company, title:job.title, overall, overallTxt, dims, hit, miss, suggestions, portfolio, pickedProjects, excluded, structure};
 }
 
 function reportHTML(r){
@@ -3229,6 +3265,35 @@ function reportHTML(r){
       </div>
     </div>
 
+    ${r.structure ? `
+    <div class="card pad corners reveal" style="--d:.08s;margin-bottom:14px">
+      <div class="sec-head"><h3>简历结构调整</h3><span class="tag">STRUCTURE</span></div>
+      <div class="sugg"><div class="s-advice">${r.structure}</div></div>
+    </div>` : ''}
+
+    ${r.pickedProjects && r.pickedProjects.length ? `
+    <div class="card pad corners reveal" style="--d:.12s;margin-bottom:14px">
+      <div class="sec-head"><h3>项目挑选与改写</h3><span class="tag">JOB HUNT COPILOT · PICK &amp; REWRITE</span></div>
+      ${r.pickedProjects.map((p,i)=>`
+        <div class="proj-pick">
+          <div class="pp-head">
+            <span class="pp-n">${i+1}</span>
+            <div class="pp-mid">
+              <b class="pp-name">${p.name}</b>
+              <div class="pp-reason">${p.reason}</div>
+            </div>
+          </div>
+          <div class="pp-bullets">
+            ${(p.bullets||[]).map(b=>`<div class="pp-bullet"><span class="pp-dot">▸</span>${b}</div>`).join('')}
+          </div>
+        </div>`).join('')}
+      ${r.excluded && r.excluded.length ? `
+        <div class="pp-excluded">
+          <div class="pp-ex-title">已排除的经历</div>
+          ${r.excluded.map(e=>`<div class="pp-ex-item"><b>${e.name}</b> — ${e.reason}</div>`).join('')}
+        </div>` : ''}
+    </div>` : ''}
+
     <div class="card pad corners reveal" style="--d:.1s;margin-bottom:14px">
       <div class="sec-head"><h3>逐条修改建议</h3><span class="tag">${r.suggestions.length} ITEMS</span></div>
       <div class="sugg-list">
@@ -3271,6 +3336,13 @@ function exportReport(){
     '',
     '## 修改建议',
     ...r.suggestions.map((s,i)=>`${i+1}. **${s.issue}**\n   ${s.advice}\n   示例：${s.example||''}`),
+    '',
+    '## 简历结构调整',
+    r.structure || '（无）',
+    '',
+    '## 项目挑选与改写（Job Hunt Copilot）',
+    ...(r.pickedProjects||[]).map((p,i)=>`${i+1}. **${p.name}**（${p.reason}）\n   ${(p.bullets||[]).map(b=>`- ${b}`).join('\n   ')}`),
+    ...((r.excluded||[]).length ? ['', '已排除：', ...r.excluded.map(e=>`- **${e.name}**：${e.reason}`)] : []),
     '',
     '## 作品集清单',
     ...r.portfolio.map(p=>`- [${p.done?'x':' '}] ${p.item}`),

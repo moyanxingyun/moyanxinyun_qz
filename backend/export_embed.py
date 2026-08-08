@@ -26,8 +26,8 @@ def js_array(rows):
 
 
 def replace_array(text, name, rows):
-    pat = re.compile(r"(let " + name + r"\s*=\s*)\[.*?\n\];", re.S)
-    new = "\\1" + js_array(rows)
+    pat = re.compile(r"(let " + name + r"\s*=\s*)\[.*?\n\];?", re.S)
+    new = "\\1" + js_array(rows) + ";"
     text, n = pat.subn(new, text)
     return text, n
 

@@ -23,3 +23,8 @@ backend/data.db
 
 # 工具二进制
 cloudflared.exe
+
+# 技能包解压临时目录
+_skill_extract/
+_jhc.zip
+*.skill

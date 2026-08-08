@@ -19,6 +19,7 @@ API_URL = os.environ.get("DEEPSEEK_API_URL", "https://api.deepseek.com/chat/comp
 MODEL = os.environ.get("DEEPSEEK_MODEL", "deepseek-v4-flash")
 
 SYSTEM_PROMPT = """你是一位资深游戏美术 HR 顾问，专精游戏场景美术 / 地编方向的校招简历优化。
+你的工作流基于 Job Hunt Copilot 求职助手方法论：先拆解 JD 关键词，再从简历中挑选最匹配的项目经历重写 bullet，最后给出结构调整建议。
 根据【目标岗位 JD】和【我的简历】输出结构化 JSON，字段必须严格如下：
 {
   "overall": 0-100 的整数,
@@ -36,12 +37,19 @@ SYSTEM_PROMPT = """你是一位资深游戏美术 HR 顾问，专精游戏场景
   "suggestions": [
     {"issue": "问题", "advice": "具体建议", "example": "改法示例（带量化或作品集动作）"}
   ],
-  "portfolio": [{"item": "作品集检查项", "done": true 或 false}]
+  "portfolio": [{"item": "作品集检查项", "done": true 或 false}],
+  "pickedProjects": [
+    {"name": "选中的项目/经历名", "reason": "为何选中（对应 JD 哪些要求）", "bullets": ["改写后的 bullet 1，措辞贴近 JD 语言", "改写后的 bullet 2，突出个人决策与量化结果"]}
+  ],
+  "excluded": [{"name": "排除的项目/经历名", "reason": "为何排除"}],
+  "structure": "简历整体结构调整建议（如：技能区前移 / 项目经历按相关度重排 / 压缩某部分篇幅）"
 }
 硬性要求：
 1. suggestions 至少 4 条，必须结合目标公司背景与 JD 关键词，禁止通用套话；
 2. 每条建议都要能直接执行（改哪里、补什么、作品集怎么摆）；
-3. 只输出 JSON，不要任何前后缀文字。"""
+3. 先分析 JD 关键词：核心技能要求、岗位层级、业务方向，作为改写的锚点；
+4. 从简历中挑选 2-4 个与 JD 最匹配的项目经历，按相关度排序写入 pickedProjects，每个项目给出 2-3 条改写后的 bullet points，并在 excluded 中说明排除了哪些经历及原因；
+5. 只输出 JSON，不要任何前后缀文字。"""
 
 DIMS_KEYS = ["软件技能", "项目经验", "作品集", "经历表达", "岗位匹配度"]
 
@@ -92,6 +100,28 @@ def mock_result(job):
             {"item": "含白模 → 成品的过程图", "done": False},
             {"item": "场景截图含引擎实时画面与性能说明", "done": False},
         ],
+        "pickedProjects": [
+            {
+                "name": "开放世界小镇地编（课程项目）",
+                "reason": "对应 JD「地形编辑 / 大世界」核心要求",
+                "bullets": [
+                    "基于 UE5 Landscape 完成 1km² 山谷地形与植被铺装，DrawCall 控制在 120 以内",
+                    "独立完成白模验证到美术落地的地编全流程，输出 LOD 分层与性能说明",
+                ],
+            },
+            {
+                "name": "废弃车站场景（个人项目）",
+                "reason": "对应 JD「次世代 PBR 流程 / 场景搭建」要求",
+                "bullets": [
+                    "ZBrush 高模精雕 180 万面 → 拓扑至 8 万三角面，Substance Painter 输出全套 PBR 贴图",
+                    "Marmoset 烘焙 AO/Normal/Curvature，最终 UE5 实时渲染 3 个时段氛围对比图",
+                ],
+            },
+        ],
+        "excluded": [
+            {"name": "UI 图标绘制练习", "reason": "与目标岗位（场景美术/地编）匹配度低，建议压缩篇幅"}
+        ],
+        "structure": "建议技能区前移：将「UE5 / Landscape / 地形地编」提到技能第一行；项目经历按本报告 pickedProjects 的顺序重排；删除与场景美术无关的社团经历，压缩至半行以内。",
     }
 
 
@@ -128,6 +158,9 @@ def normalize(result, job):
     result["miss"] = result.get("miss", []) or []
     result["suggestions"] = result.get("suggestions", []) or []
     result["portfolio"] = result.get("portfolio") or result.get("portfolio_checklist", []) or []
+    result["pickedProjects"] = result.get("pickedProjects", []) or []
+    result["excluded"] = result.get("excluded", []) or []
+    result["structure"] = result.get("structure", "")
     return result
 
 
